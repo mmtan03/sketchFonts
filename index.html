@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手绘文本Sketch效果</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .controls {
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        label {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        input, select, button, textarea {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        textarea {
+            min-width: 150px;
+            min-height: 60px;
+            resize: vertical;
+            font-family: monospace;
+        }
+        input[type="range"] {
+            width: 80px;
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 30px;
+            padding: 2px;
+            border-radius: 4px;
+        }
+        .control-group span {
+            font-size: 12px;
+            color: #666;
+            min-width: 30px;
+            text-align: center;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #canvas-container {
+            background: white;
+            display: inline-block;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .frame-counter {
+            font-size: 12px;
+            color: #666;
+        }
+        .word-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <div class="control-group">
+            <label for="textInput">文本:</label>
+            <textarea id="textInput" placeholder="输入文本，支持换行">who
+are
+you</textarea>
+        </div>
+        
+        <div class="control-group">
+            <label for="seedInput">种子值:</label>
+            <input type="number" id="seedInput" value="12345" min="1" max="999999">
+        </div>
+        
+        <div class="control-group">
+            <label for="fontSizeSlider">字体大小:</label>
+            <input type="range" id="fontSizeSlider" min="100" max="400" value="200" step="10">
+            <span id="fontSizeValue">200</span>
+        </div>
+        
+        <div class="control-group">
+            <label for="lineSpacingSlider">行距:</label>
+            <input type="range" id="lineSpacingSlider" min="0.8" max="2.0" value="1.2" step="0.1">
+            <span id="lineSpacingValue">1.2</span>
+        </div>
+        
+        <div class="control-group">
+            <label for="letterSpacingSlider">字距:</label>
+            <input type="range" id="letterSpacingSlider" min="0.5" max="2.0" value="1.0" step="0.1">
+            <span id="letterSpacingValue">1.0</span>
+        </div>
+        
+        <div class="control-group">
+            <label for="alignSelect">对齐:</label>
+            <select id="alignSelect">
+                <option value="left">左对齐</option>
+                <option value="center" selected>居中</option>
+                <option value="right">右对齐</option>
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label for="offsetXSlider">X偏移:</label>
+            <input type="range" id="offsetXSlider" min="-500" max="500" value="0" step="5">
+            <span id="offsetXValue">0</span>
+        </div>
+        
+        <div class="control-group">
+            <label for="offsetYSlider">Y偏移:</label>
+            <input type="range" id="offsetYSlider" min="-200" max="200" value="0" step="5">
+            <span id="offsetYValue">0</span>
+        </div>
+        
+        <div class="control-group">
+            <label for="colorPicker">文字颜色:</label>
+            <input type="color" id="colorPicker" value="#000000">
+        </div>
+        
+        <div class="control-group">
+            <button id="generateBtn">重新生成</button>
+        </div>
+        
+        <div class="control-group">
+            <label>
+                <input type="checkbox" id="randomFonts"> 随机字体
+            </label>
+        </div>
+        
+        <div class="control-group">
+            <label>
+                <input type="checkbox" id="autoRefresh" checked> 自动刷新
+            </label>
+        </div>
+        
+        <div class="control-group">
+            <label for="bgFile">背景图片:</label>
+            <input type="file" id="bgFile" accept="image/*" multiple>
+        </div>
+        
+        <div class="control-group" id="bgControls" style="display: none;">
+            <button id="prevBg">上一张</button>
+            <span id="bgInfo">1/1</span>
+            <button id="nextBg">下一张</button>
+            <button id="noBg">无背景</button>
+        </div>
+        
+        <div class="frame-counter" id="frameCounter">下次刷新: 20帧</div>
+    </div>
+    
+    <div id="canvas-container"></div>
+    
+    <div class="word-info" id="wordInfo">
+        <!-- 这里显示每个字母使用的风格和字体信息 -->
+    </div>
+
+    <script src="layout.js"></script>
+    <script src="sketch.js"></script>
+</body>
+</html>
