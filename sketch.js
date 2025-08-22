@@ -49,7 +49,7 @@ function setup() {
     textInput = select('#textInput');
     seedInput = select('#seedInput');
     generateBtn = select('#generateBtn');
-    gifExport = select('#gifExport');
+    gifexport = select('#gifExport');
     randomFontsCheckbox = select('#randomFonts');
     autoRefreshCheckbox = select('#autoRefresh');
     fontSizeSlider = select('#fontSizeSlider');
@@ -74,7 +74,7 @@ function setup() {
     textInput.input(handleTextChange);
     seedInput.input(handleSeedChange);
     generateBtn.mousePressed(regenerateLayout);
-    gifExport.mousePressed(savegif);//export GIF
+    gifexport.mousePressed(savegif);//export GIF
     randomFontsCheckbox.changed(regenerateLayout);
     bgFileInput.changed(handleBackgroundImages);
     colorPicker.input(handleColorChange);
