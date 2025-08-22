@@ -95,7 +95,7 @@ function setup() {
     // 初始化
     updateSliderValues();
     regenerateLayout();
-    savegif();
+    //savegif();
 }
 
 function draw() {
