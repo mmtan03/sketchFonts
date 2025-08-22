@@ -1,9 +1,10 @@
 /*
  * SPDX-FileCopyrightText: 2025 明明有点Tan
+ * SPDX-License-Identifier: MIT
  */
 
 // 控制变量
-let textInput, seedInput, generateBtn, randomFontsCheckbox, autoRefreshCheckbox;
+let textInput, seedInput, generateBtn, randomFontsCheckbox, autoRefreshCheckbox, gifExport;
 let fontSizeSlider, lineSpacingSlider, letterSpacingSlider, alignSelect;
 let offsetXSlider, offsetYSlider; // 新增偏移滑杆
 let frameCounter, wordInfo, bgFileInput, colorPicker;
@@ -48,6 +49,7 @@ function setup() {
     textInput = select('#textInput');
     seedInput = select('#seedInput');
     generateBtn = select('#generateBtn');
+    gifExport = select('#gifExport');
     randomFontsCheckbox = select('#randomFonts');
     autoRefreshCheckbox = select('#autoRefresh');
     fontSizeSlider = select('#fontSizeSlider');
@@ -72,6 +74,7 @@ function setup() {
     textInput.input(handleTextChange);
     seedInput.input(handleSeedChange);
     generateBtn.mousePressed(regenerateLayout);
+    gifExport.mousePressed(savegif);//export GIF
     randomFontsCheckbox.changed(regenerateLayout);
     bgFileInput.changed(handleBackgroundImages);
     colorPicker.input(handleColorChange);
@@ -92,6 +95,7 @@ function setup() {
     // 初始化
     updateSliderValues();
     regenerateLayout();
+    savegif();
 }
 
 function draw() {
@@ -175,6 +179,9 @@ function regenerateLayout() {
     needsRedraw = true;
 }
 
+function savegif() {
+    saveGif('sketch.gif', 2);
+}
 // 绘制所有字母
 function drawAllLetters() {
     for (let config of layoutManager.letterConfigs) {

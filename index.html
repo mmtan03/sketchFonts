@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2025 明明有点Tan
+SPDX-License-Identifier: MIT
+-->
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -11,6 +16,8 @@
             padding: 20px;
             font-family: Arial, sans-serif;
             background: #f5f5f5;
+            position: center;
+            
         }
         .controls {
             margin-bottom: 20px;
@@ -60,20 +67,22 @@
             text-align: center;
         }
         button {
-            background: #007bff;
+            background: #353535;
             color: white;
             border: none;
             cursor: pointer;
             transition: background 0.3s;
         }
         button:hover {
-            background: #0056b3;
+            background: #00b36e;
         }
         #canvas-container {
             background: white;
             display: inline-block;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position:center;
+            transform: translateX(20%);
         }
         .frame-counter {
             font-size: 12px;
@@ -175,6 +184,9 @@ you</textarea>
             <button id="noBg">无背景</button>
         </div>
         
+        <div class="control-group">
+            <button id="gifExport">导出GIF</button>
+        </div>
         <div class="frame-counter" id="frameCounter">下次刷新: 20帧</div>
     </div>
     
